@@ -6,14 +6,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 from dotenv import dotenv_values
-
 from git_root import git_root
 
 _MAPS_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 
 def _api_key() -> str:
-    return dotenv_values(".env")["API_KEY"]
+    api_key = dotenv_values(".env")["API_KEY"]
+    if not api_key:
+        raise ValueError()
+    return api_key
 
 
 def coordinates_for_location(location: str, base_url: str = _MAPS_BASE_URL) -> dict:

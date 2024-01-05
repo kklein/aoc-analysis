@@ -16,12 +16,16 @@ def _load_data(path: Path) -> pd.DataFrame:
     return df
 
 
-def _histogram(df: pd.DataFrame, filename: str = "languages.png", n_languages: int = 20) -> None:
+def _histogram(
+    df: pd.DataFrame, filename: str = "languages.png", n_languages: int = 20
+) -> None:
     n = df[_N_REPOS].sum()
 
     fig, ax = plt.subplots(figsize=(9, 6))
 
-    df.sort_values(_N_REPOS, ascending=False).iloc[:n_languages].plot.bar(y=_Q_REPOS, ax=ax)
+    df.sort_values(_N_REPOS, ascending=False).iloc[:n_languages].plot.bar(
+        y=_Q_REPOS, ax=ax
+    )
 
     ax.set_ylabel("fraction of repositories")
     ax.set_title(f"Which programming language was used how often? (n={n})")

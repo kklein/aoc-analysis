@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p data/locations
+
 for year in "2020" "2021" "2022" "2023"
 do
     urls=$(curl https://adventofcode.com/$year/leaderboard | grep -o 'https://github.com/[^"]*')

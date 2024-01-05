@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p data/submissions
+
 for year in "2021" "2022" "2023"
 do
     echo $year

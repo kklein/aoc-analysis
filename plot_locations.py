@@ -12,7 +12,7 @@ _MAPS_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 
 def _api_key() -> str:
-    api_key = dotenv_values(".env")["API_KEY"]
+    api_key = dotenv_values(".env")["GOOGLE_API_KEY"]
     if not api_key:
         raise ValueError()
     return api_key

@@ -12,6 +12,6 @@ do
 	# Curl the url and extract the required information
 	location=$(curl -s $url | grep -o 'aria-label="Home location: [^"]*' | sed -n 's|aria-label="Home location: ||p')
 	# Write the output to a separate file
-	echo $location > "data/user_locations/${user//\//-}".txt
+	echo $location > "data/locations/${user//\//-}".txt
     done
 done

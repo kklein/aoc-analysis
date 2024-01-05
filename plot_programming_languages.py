@@ -21,7 +21,7 @@ def _histogram(df: pd.DataFrame, filename: str = "languages.png") -> None:
 
     fig, ax = plt.subplots(figsize=(9, 6))
 
-    df.plot.bar(y=_Q_REPOS, ax=ax)
+    df.sort_values(_N_REPOS, ascending=False).plot.bar(y=_Q_REPOS, ax=ax)
 
     ax.set_ylabel("#repositories")
     ax.set_title(f"Which programming language was used how often? (n={n})")

@@ -26,28 +26,38 @@ def _load_data(path: Path) -> DfDict:
     return dfs
 
 
-def _plot_absolute(dfs: DfDict, ax: matplotlib.axes.Axes) -> None:
-    for year, df in dfs.items():
-        ax.plot(df.index, df[_N_SUBMISSIONS], label=year)
-    ax.legend()
-    ax.set_title("Number of submissions per day")
-    ax.set_xlabel("Day")
-    ax.set_ylabel("Submissions")
+def _plot_absolute(
+    dfs: DfDict, ax_linear: matplotlib.axes.Axes, ax_log: matplotlib.axes.Axes
+) -> None:
+    for ax in [ax_linear, ax_log]:
+        for year, df in dfs.items():
+            ax.plot(df.index, df[_N_SUBMISSIONS], label=year)
+        ax.legend()
+        ax.set_title("Number of submissions per day")
+        ax.set_xlabel("Day")
+    ax_linear.set_ylabel("Submissions")
+    ax_log.set_ylabel("Submissions (log-scale)")
+    ax_log.set_yscale("log")
 
 
-def _plot_relative(dfs: DfDict, ax: matplotlib.axes.Axes) -> None:
-    for year, df in dfs.items():
-        ax.plot(df.index, df[_Q_SUBMISSIONS], label=year)
-    ax.legend()
-    ax.set_title("Share of submissions per day relative to first day")
-    ax.set_xlabel("Day")
-    ax.set_ylabel("Share of Submissions")
+def _plot_relative(
+    dfs: DfDict, ax_linear: matplotlib.axes.Axes, ax_log: matplotlib.axes.Axes
+) -> None:
+    for ax in [ax_linear, ax_log]:
+        for year, df in dfs.items():
+            ax.plot(df.index, df[_Q_SUBMISSIONS], label=year)
+        ax.legend()
+        ax.set_title("Share of submissions per day relative to first day")
+        ax.set_xlabel("Day")
+    ax_linear.set_ylabel("Share of submissions")
+    ax_log.set_ylabel("Share of submissions (log-scale)")
+    ax_log.set_yscale("log")
 
 
 def _plot(dfs: DfDict) -> None:
-    fig, axs = plt.subplots(ncols=2, figsize=(18, 6))
-    _plot_absolute(dfs, axs[0])
-    _plot_relative(dfs, axs[1])
+    fig, axs = plt.subplots(ncols=2, nrows=2, figsize=(18, 12))
+    _plot_absolute(dfs, axs[0][0], axs[1][0])
+    _plot_relative(dfs, axs[0][1], axs[1][1])
     filepath = Path(git_root()) / "submissions.png"
     fig.savefig(filepath)
     print(f"Saved file to {filepath}.")

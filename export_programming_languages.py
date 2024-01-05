@@ -3,10 +3,10 @@ from collections import Counter
 from functools import cache
 from pathlib import Path
 
-from tqdm import tqdm
 import click
 import requests
 from dotenv import dotenv_values
+from tqdm import tqdm
 
 
 def _gh_pat() -> str:
@@ -21,7 +21,7 @@ def _headers():
     return {"Authorization": f"token {_gh_pat()}"}
 
 
-def _repos(n_pages: int = 10) -> list[tuple[str, str]]:
+def _repos(n_pages: int = 20) -> list[tuple[str, str]]:
     lookup = []
     for page in tqdm(range(n_pages)):
         response = requests.get(

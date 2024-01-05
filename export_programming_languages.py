@@ -3,6 +3,7 @@ from collections import Counter
 from functools import cache
 from pathlib import Path
 
+from tqdm import tqdm
 import click
 import requests
 from dotenv import dotenv_values
@@ -20,25 +21,26 @@ def _headers():
     return {"Authorization": f"token {_gh_pat()}"}
 
 
-def _repos(n_pages: int = 2) -> list[tuple[str, str]]:
+def _repos(n_pages: int = 10) -> list[tuple[str, str]]:
     lookup = []
-    for page in range(n_pages):
+    for page in tqdm(range(n_pages)):
         response = requests.get(
             f"https://api.github.com/search/repositories?q=adventofcode&per_page=100&page={page}",
             headers=_headers(),
         )
 
         try:
-            for item in response.json()["items"]:
+            items = response.json()["items"]
+            for item in items:
                 owner = item["owner"]["login"]
                 repo = item["name"]
                 lookup.append((owner, repo))
         except:
-            print(f"broke at {page}")
+            print(f"broke at page {page}")
             break
-
-        lookup = list(set(lookup))
-        return lookup
+    lookup = list(set(lookup))
+    print(f"Created a list of {len(lookup)} repositories.")
+    return lookup
 
 
 def _determine_language(owner: str, repo: str) -> str | None:
@@ -68,7 +70,7 @@ def _export(
 def main_cli(data_dir):
     repos = _repos()
     languages = Counter()
-    for owner, repo in repos:
+    for owner, repo in tqdm(repos):
         language = _determine_language(owner, repo)
         if language:
             languages[language] += 1
